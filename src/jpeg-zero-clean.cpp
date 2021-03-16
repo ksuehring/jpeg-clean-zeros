@@ -23,6 +23,7 @@ int main (int argc, char *argv[])
     return 1;
   }
   
+  inFile.seekg(0, SEEK_END);
   streampos inFileSize = inFile.tellg();
   
   char* fileContent = new char [inFileSize];
