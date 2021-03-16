@@ -58,22 +58,29 @@ int main (int argc, char *argv[])
     {
       string outFileName = argv[2];
       ofstream outFile;
-  
-      outFile.open (outFileName, ios::out | ios::binary);
-      if (!outFile.is_open())
+
+      if ((inFileName == outFileName) && (zeroCnt == 0))
       {
-        cerr << "failed to open \""  << outFileName << "\"" <<  endl;
-        return 1;
+        cout << "No trailing zeros found, not overwriting input " << inFileName << endl;
       }
-  
-      outFile.write (fileContent, pos+1);
-      if (outFile.bad())
+      else
       {
-        cerr << "error writing to \""  << outFileName << "\"" <<  endl;
+        outFile.open(outFileName, ios::out | ios::binary);
+        if (!outFile.is_open())
+        {
+          cerr << "failed to open \"" << outFileName << "\"" << endl;
+          return 1;
+        }
+
+        outFile.write(fileContent, pos + 1);
+        if (outFile.bad())
+        {
+        cerr << "error writing to \"" << outFileName << "\"" << endl;
         return 1;
+        }
+        outFile.close();
+        cout << "Saved " << zeroCnt << " bytes in \"" << outFileName << "\"" << endl;
       }
-      outFile.close();
-      cout << "Saved "  << zeroCnt << " bytes in \""<< outFileName <<"\"" <<  endl;
     }
     else
     {
