@@ -23,7 +23,7 @@ int main (int argc, char *argv[])
     return 1;
   }
   
-  inFile.seekg(0, SEEK_END);
+  inFile.seekg(0, std::ios_base::end);
   streampos inFileSize = inFile.tellg();
   
   char* fileContent = new char [inFileSize];
