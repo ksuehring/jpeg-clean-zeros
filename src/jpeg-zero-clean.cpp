@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <limits>
 
 using namespace std;
 
@@ -23,21 +24,27 @@ int main (int argc, char *argv[])
     return 1;
   }
   
-  inFile.seekg(0, std::ios_base::end);
-  streampos inFileSize = inFile.tellg();
+  // detect file size bz reading through file
+  inFile.seekg(0, std::ios_base::beg);
+  inFile.ignore(std::numeric_limits<std::streamsize>::max());
+  std::streamsize inFileSize = inFile.gcount();
+  inFile.clear();
+  inFile.seekg(0, std::ios_base::beg);
   
   char* fileContent = new char [inFileSize];
-  inFile.seekg (0, ios::beg);
+
   inFile.read (fileContent, inFileSize);
   if (inFile.bad())
   {
-    cerr << "error reading from \""  << inFileName << "\"" <<  endl;
+    cerr << "Error reading from \""  << inFileName << "\"" <<  endl;
     return 1;
   }
   inFile.close();
  
-  int zeroCnt=0;
-  int pos = (int)inFileSize - 1;
+  static_assert(sizeof(std::streamsize) <= sizeof(int64_t), "std::streamsize > 64 bit not supported");
+
+  int64_t zeroCnt=0;
+  int64_t pos = (int64_t)inFileSize - 1;
   
   while (pos > 0 && fileContent[pos] == 0)
   {
@@ -103,6 +110,5 @@ int main (int argc, char *argv[])
  
   delete[] fileContent;
   return 0;
-
 }
 
