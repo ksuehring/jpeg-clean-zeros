@@ -18,7 +18,7 @@ read -p "Type 'confirm' to confirm cleaning: " confirm
 if [ "$confirm" == "confirm" ]
 then
   echo Cleaning...
-  find $target_dir \( -iname \*.jpg -o -name \*.jpeg  \) -exec jpeg-zero-clean {} {} \;
+  find "$target_dir" \( -iname \*.jpg -o -name \*.jpeg  \) -exec jpeg-zero-clean {} {} \;
 else
   echo Aborting.
 fi
