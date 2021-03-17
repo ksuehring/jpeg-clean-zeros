@@ -3,8 +3,11 @@
 #include <fstream>
 #include <iomanip>
 #include <limits>
+#include <cstring>
 
 using namespace std;
+
+uint8_t SOI[]  = {0xFF, 0xD8};  // start of image tag
 
 int main (int argc, char *argv[])
 {
@@ -30,6 +33,12 @@ int main (int argc, char *argv[])
   std::streamsize inFileSize = inFile.gcount();
   inFile.clear();
   inFile.seekg(0, std::ios_base::beg);
+
+  if (inFileSize < (sizeof(SOI) ))
+  {
+    cerr << "File size too small for a JPEG image" << endl;
+    return 1;
+  }
   
   char* fileContent = new char [inFileSize];
 
@@ -43,9 +52,17 @@ int main (int argc, char *argv[])
  
   static_assert(sizeof(std::streamsize) <= sizeof(int64_t), "std::streamsize > 64 bit not supported");
 
+  // check for starting tag of the image
+  if (memcmp (fileContent, SOI, sizeof(SOI) ) != 0)
+  {
+    cerr << "SOI (Start Of Image) tag not found, probably no JFIF file." <<  endl;
+    return 1;
+  }
+
+  // count zero bytes from the end
   int64_t zeroCnt=0;
   int64_t pos = (int64_t)inFileSize - 1;
-  
+
   while (pos > 0 && fileContent[pos] == 0)
   {
     pos--;
