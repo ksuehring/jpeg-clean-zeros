@@ -89,7 +89,7 @@ int main (int argc, char *argv[])
       }
       else
       {
-        outFile.open(outFileName, ios::out | ios::binary);
+        outFile.open(outFileName, ofstream::out | ofstream::binary);
         if (!outFile.is_open())
         {
           cerr << "failed to open \"" << outFileName << "\"" << endl;
