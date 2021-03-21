@@ -20,7 +20,7 @@ int main (int argc, char *argv[])
   string inFileName = argv[1];
   ifstream inFile;
   
-  inFile.open (inFileName, ios::in | ios::app | ios::binary);
+  inFile.open (inFileName, ifstream::in | ifstream::binary);
   if (!inFile.is_open())
   {
     cerr << "failed to open \""  << inFileName << "\"" <<  endl;
